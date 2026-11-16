@@ -1,5 +1,17 @@
 let humanScore = 0;
 let computerScore = 0;
+let maxScore = 2;
+
+let rockButton = document.querySelector("#rockId");
+let paperButton = document.querySelector("#paperId");
+let scissorsButton = document.querySelector("#scissorsId");
+
+let resultDiv =  document.querySelector("#resultId");
+
+rockButton.addEventListener("click", () => playRound("rock", getComputerChoice()));
+paperButton.addEventListener("click", () => playRound("paper", getComputerChoice()));
+scissorsButton.addEventListener("click", () => playRound("scissors", getComputerChoice()));
+
 
 /**
  * return randomly Rock, Paper or scissors
@@ -17,49 +29,74 @@ function getComputerChoice() {
     }
 }
 
-function getHumanChoice(){
- return prompt("Please write your choice form the list: 'Rock', 'Paper' or 'Scissors'");
+
+function reportResultsInUi(text){
+    resultDiv.innerText = `Results: ${text}`;
+}
+
+function disableButtons(){
+    rockButton.disabled = true;
+    paperButton.disabled = true;
+    scissorsButton.disabled = true;
+    rockButton.classList.remove("button");
+rockButton.classList.add("disabledButton");
+paperButton.classList.add("disabledButton");
+scissorsButton.classList.add("disabledButton");
+
 }
 
 function playRound(humanChoice, computerChoice) {
+    if(humanScore >= maxScore || computerScore >= maxScore){
+        disableButtons();
+        let msg = humanScore > computerScore ? `The winner is Human by score ${humanScore} vs ${computerScore}.`
+                                             : (humanScore == computerScore ? "No winners"
+                                                 : `The winner is Computer by score ${computerScore} vs ${humanScore}.`); 
+        reportResultsInUi(msg);
+        return;
+    }
     let humanChoiceSimple = humanChoice.trim().toLowerCase();
     let computerChoiceSimple = computerChoice.trim().toLowerCase();
 
     if(humanChoiceSimple === computerChoiceSimple){
-        console.log("No winers.")
+       reportResultsInUi("No winers.")
         return;
     }
     if(humanChoiceSimple === "rock" && computerChoiceSimple === "scissors"){
         humanScore ++;
-        console.log("Computer loses! Rock beats Scissors.");
+        reportResultsInUi("Computer loses! Rock beats Scissors.");
         return;
     }
     if(humanChoiceSimple === "scissors" && computerChoiceSimple === "rock"){
         computerScore ++;
-        console.log("Human loses! Rock beats Scissors.");
+        reportResultsInUi("Human loses! Rock beats Scissors.");
         return;
     }
     if(humanChoiceSimple === "rock" && computerChoiceSimple === "paper"){
         computerScore ++;
-        console.log("Human loses! Paper beats Rock.");
+        reportResultsInUi("Human loses! Paper beats Rock.");
         return;
     }
     if(humanChoiceSimple === "paper" && computerChoiceSimple === "rock"){
         humanScore ++;
-         console.log("Computer loses! Paper beats Rock.");
+         reportResultsInUi("Computer loses! Paper beats Rock.");
         return;
     }
      if(humanChoiceSimple === "paper" && computerChoiceSimple === "scissors"){
         computerScore ++;
-         console.log("Human loses! Scissors beats Paper.");
+        reportResultsInUi("Human loses! Scissors beats Paper.");
         return;
     }
     if(humanChoiceSimple === "scissors" && computerChoiceSimple === "paper"){
         humanScore ++;
-         console.log("Computer loses! Scissors beats Paper.");
+         reportResultsInUi("Computer loses! Scissors beats Paper.");
         return;
     }
     return;    
+}
+
+/*
+function getHumanChoice(){
+ return prompt("Please write your choice form the list: 'Rock', 'Paper' or 'Scissors'");
 }
 
 function playGame(rounds){
@@ -76,8 +113,8 @@ function playGame(rounds){
            alert(`No winner.`);
     }
 }
-
-playGame(5);
+*/
+//playGame(5);
 
 
 
